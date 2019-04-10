@@ -79,7 +79,6 @@ def station_data():
             return json.load(stations)
 
 def call_TFL_API(url_in):
-    credentials = "?app_id=86e5ac12&app_key=%206527cf5c3e54e1fefd6fa890a6cfa75b"
     url = url_in + credentials
     conn = req.urlopen(url)
     data = conn.read()
