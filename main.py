@@ -88,8 +88,5 @@ def call_TFL_API(url_in):
     API_response = json.loads(str_data)
     return API_response
 
-def show_config():
-        for k,v in app.config.items():
-            print("{}, -----> {}".format(k,v))
 if __name__ == "__main__":
     app.run(debug=True)
