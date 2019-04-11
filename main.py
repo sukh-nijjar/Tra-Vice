@@ -13,11 +13,13 @@ brand_colours = {"bakerloo" : "#B36305", "central" : "#E32017", "circle" : "#FFD
                  "metropolitan" : "#9B0056", "london-overground" : "#e86a10", "northern" : "#000000",
                  "piccadilly" : "#003688", "tfl-rail" : "#0019a8", "victoria" : "#0098D4","waterloo-city" : "#95CDBA"}
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('config.py')
 
 @app.route("/")
 def index():
     # stations = get_all_stations()
+    show_config()
     return render_template("index.html", colours = brand_colours)
 
 @app.route("/arrivals", methods=["GET"])
@@ -79,14 +81,15 @@ def station_data():
             return json.load(stations)
 
 def call_TFL_API(url_in):
-    credentials = "?app_id=86e5ac12&app_key=%206527cf5c3e54e1fefd6fa890a6cfa75b"
-    url = url_in + credentials
+    url = url_in + app.config["TFL_CREDS"]
     conn = req.urlopen(url)
     data = conn.read()
     str_data = data.decode("utf8")
     API_response = json.loads(str_data)
     return API_response
 
-
+def show_config():
+        for k,v in app.config.items():
+            print("{}, -----> {}".format(k,v))
 if __name__ == "__main__":
     app.run(debug=True)
