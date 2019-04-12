@@ -121,15 +121,9 @@
 				$("#stations_list").data("line_name", line_selected);
 
 				const stations = [];
-				let stringToRemove;
-				// strip out superfluous text from station names returned by TfL API
 				$.each(data.done, function(i,item){
-					if (item.commonName.includes("Underground")) {
-						stringToRemove = "Underground Station";
-					} else {
-						stringToRemove = "Rail Station";
-					};
-					shortenedStationName = removeTextFromString(item.commonName,stringToRemove);
+					textToStrip = stringToRemove(item.commonName);
+					shortenedStationName = removeTextFromString(item.commonName,textToStrip);
 					stations.push(shortenedStationName);
 				});
 
@@ -146,7 +140,7 @@
 				// hide the get trains link
 				$("div.get_trains").hide();
 				$("#scroll_to_stations_for_line").trigger("click");
-				
+
 			})//end .done function
 			.fail(function(data) {
 				// replace this by scrolling to a error panel
@@ -184,13 +178,13 @@
 			})
 			.done(function(data) {
 				if (data.done) {
+					console.log("DATA",data);
 					// clear out arrivals information from previous request
 					if ($("#arrivals_rows").length) {
 						clearArrivalsTable();
 					}
 					$("#arrivals_table").append("<thead><tr><th>Destination</th>" +
-														 "<th>Expected</th>" +
-														 "<th>Current Location</th></tr></thead>");
+														 "<th>Expected</th></tr></thead>");
 
 					$.each(data.done, function(i,item) {
 						buildArrivalsTable(item);
@@ -220,9 +214,12 @@
 		}
 
 		function buildArrivalsTable(element) {
-			let table_row = "<tr><td>" + element.destinationName + "</td>" +
-											"<td>" + new Date(element.expectedArrival) + "</td>" +
-											"<td>" + element.currentLocation + "</td></tr>"
+			console.log("param passed to stringToRemove = ", element.destinationName);
+			let textToStrip = stringToRemove(element.destinationName);
+			let station_name = removeTextFromString(element.destinationName,textToStrip);
+			let arrival_time = new Date(element.expectedArrival).toTimeString();
+			let table_row = "<tr><td>" + station_name + "</td>" +
+											"<td>" + arrival_time.slice(0,5) + "</td></tr>"
 
 			$('#arrivals_rows').append(table_row);
 		}
@@ -231,6 +228,16 @@
 			$('#arrivals_station').empty();
 			$("#arrivals_rows").empty();
 			$("thead").remove();
+		}
+
+		function stringToRemove(str) {
+			console.log("function stringToRemove param in = ", str);
+			if (str.includes("Underground")) {
+				string_To_Remove = "Underground Station";
+			} else {
+				string_To_Remove = "Rail Station";
+			};
+			return string_To_Remove;
 		}
 
 })(jQuery);

@@ -1794,7 +1794,7 @@ input[type=radio]:checked ~ label{
 		}
 
 		table th {
-			text-align: left;
+			/* SSN text-align: left; */
 			font-weight: 400;
 			padding: 0.75em 1.25em 0.75em 1.25em;
 		}

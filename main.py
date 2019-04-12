@@ -19,7 +19,7 @@ app.config.from_pyfile('config.py')
 @app.route("/")
 def index():
     # stations = get_all_stations()
-    show_config()
+    # show_config()
     return render_template("index.html", colours = brand_colours)
 
 @app.route("/arrivals", methods=["GET"])
