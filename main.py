@@ -26,7 +26,7 @@ def index():
 def get_arrivals_for_station():
     print("/arrivals invoked")
     # print("STATION NAME {}, LINE {}".format(request.args.get("station"), request.args.get("line")))
-    station_id = get_station_id(request.args.get("station"))
+    station_id = get_station_id(request.args.get("station"), request.args.get("line"))
     print("...", station_id)
     line = request.args.get("line")
     # print("STATION ID {}, LINE {}".format(station_id, line))
@@ -34,7 +34,7 @@ def get_arrivals_for_station():
     print("url", url)
     try:
         arrivals = call_TFL_API(url)
-        print("type(arrivals)")
+        # print("len(arrivals) {}".format(len(arrivals)))
         station_name = arrivals[0]["stationName"]
         return jsonify({"done" : arrivals,
                         "station" : station_name})
@@ -53,10 +53,10 @@ def get_stations():
         message = "Unable to connect to TfL's API at the moment. Route = /stations."
         return jsonify({"error_msg" : message})
 
-def get_station_id(station_name):
+def get_station_id(station_name, line):
     stops = station_data()
     for stop in stops:
-        if stop["station_name"] == station_name:
+        if stop["station_name"] == station_name and stop["line"] == line:
             station_id = stop["station_id"]
     return station_id
 

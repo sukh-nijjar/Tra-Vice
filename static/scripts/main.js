@@ -190,9 +190,12 @@
 						buildArrivalsTable(item);
 						// console.log("NaptanID ", item.naptanId);
 					})
+					console.log("in IF statement", data.station);
 					$('#arrivals_station').append(data.station);
 				} else {
-					console.log("need to implement no arrivals use case");
+					console.log("no arrivals use case", data.station);
+					$('#arrivals_station').append(data.station);
+					noArrivalsForStation();
 				}
 			})// end done
 			.fail(function(data) {
@@ -238,6 +241,12 @@
 				string_To_Remove = "Rail Station";
 			};
 			return string_To_Remove;
+		}
+
+		function noArrivalsForStation() {
+			const no_arrivals_msg = "It is with great sadness I must inform you there are no arrivals due at this station. BOO HOO HOO (sniffle)."
+			let table_row = "<tr><td>" + no_arrivals_msg + "</td></tr>"
+			$('#arrivals_rows').append(table_row);
 		}
 
 })(jQuery);
