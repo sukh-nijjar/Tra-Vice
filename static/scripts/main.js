@@ -177,6 +177,7 @@
 				url : "/arrivals"
 			})
 			.done(function(data) {
+				console.log("ARRIVALS LENGTH",data.done.length);
 				if (data.done) {
 					console.log("DATA",data);
 					// clear out arrivals information from previous request
